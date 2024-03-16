@@ -6,6 +6,7 @@ import {
   Outlet,
   Route,
   Routes,
+  useNavigate,
 } from "react-router-dom";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
@@ -14,18 +15,22 @@ import {
   AlertBrowserSource,
   loader as alertBrowserSourceLoader,
 } from "./pages/alert/AlertBrowserSource";
+import { Dashboard } from "./components/dashboard";
+import { Tiphome } from "./components/tiphome";
+import theme from "./theme";
 
 export const RoutesWithChakraUi = () => {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Outlet />
     </ChakraProvider>
   );
 };
 
 function App() {
-  const { dispatch, state } = useGlobalState();
-  console.log(state);
+  const { dispatch } = useGlobalState();
+  const navigate = useNavigate();
+
   return (
     <DynamicContextProvider
       settings={{
@@ -34,23 +39,28 @@ function App() {
         eventsCallbacks: {
           onAuthSuccess: () => {
             dispatch({ type: "setAuth" });
+            navigate("/dashboard");
+          },
+          onLogout: () => {
+            dispatch({ type: "setUnauth" });
+            navigate("/");
           },
         },
       }}
     >
       {/* <DynamicWagmiConnector> */}
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/alert/:userId"
-            element={<AlertBrowserSource />}
-            loader={alertBrowserSourceLoader}
-          />
-          <Route path="/" element={<RoutesWithChakraUi />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route
+          path="/alert/:userId"
+          element={<AlertBrowserSource />}
+          loader={alertBrowserSourceLoader}
+        />
+        <Route path="/" element={<RoutesWithChakraUi />}>
+          <Route index element={<Home />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="tiphome" element={<Tiphome />} />
+        </Route>
+      </Routes>
       {/* </DynamicWagmiConnector> */}
     </DynamicContextProvider>
   );

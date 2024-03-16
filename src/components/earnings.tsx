@@ -12,7 +12,7 @@ import { NumberInput, NumberInputField } from "@chakra-ui/react";
 
 export const Earnings = () => {
   return (
-    <Box m={4} mr={0} p={0} w="40%" bg="red.400">
+    <Box m={4} mr={0} p={0} w="40%">
       <Card>
         <CardHeader>
           <Heading size="md">Earnings Report</Heading>
