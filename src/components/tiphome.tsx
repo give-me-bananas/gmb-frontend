@@ -18,7 +18,12 @@ import title from "/img/title.png";
 
 export const Tiphome = () => {
   return (
-    <Center>
+    <Center
+      bg={"#ffecad"}
+      height={"100vh"}
+      justifyContent={"center"}
+      alignItems={"center"}
+    >
       <VStack>
         <img
           src={title}
@@ -27,10 +32,7 @@ export const Tiphome = () => {
           style={{ width: "50%", marginTop: "-10" }}
         />
         <Card maxW="md">
-          {/* <CardHeader>
-          <Image objectFit='cover' src="/img/title.png" alt="title" />
-            </CardHeader>   */}
-          <Container bg={"yellow"} height={"20vh"} width="md" p={0}>
+          <Container bg={"#ffcf33"} height={"20vh"} width="md" p={0}>
             <Box bg={"orange"} float={"right"} p={2} height={"10vh"}>
               <DynamicWidget />
             </Box>

@@ -10,6 +10,7 @@ import { Dashboard } from "./components/dashboard";
 import { Tiphome } from "./components/tiphome";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import theme from "./theme";
+import { InputStreamer } from "./components/inputStreamer";
 
 export const RoutesWithChakraUi = () => {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="tiphome" element={<Tiphome />} />
+            <Route path="gmb" element={<InputStreamer />} />
           </Route>
         </Routes>
       </DynamicWagmiConnector>
