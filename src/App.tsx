@@ -1,7 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
-
 import { Home } from "./components/home";
-import "./App.css";
+import { Dashboard } from "./components/dashboard";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
@@ -28,7 +27,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path="about" element={<About />} /> */}
+            <Route path="dashboard" element={<Dashboard />} />
           </Routes>
           {/* </DynamicWagmiConnector> */}
         </DynamicContextProvider>
