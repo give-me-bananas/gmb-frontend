@@ -1,4 +1,4 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { Home } from "./components/home";
 import "./App.css";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import { useGlobalState } from "./reducer";
 import { AlertBrowserSource } from "./pages/alert/AlertBrowserSource";
 import { Dashboard } from "./components/dashboard";
 import { Tiphome } from "./components/tiphome";
+import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import theme from "./theme";
 
 export const RoutesWithChakraUi = () => {
@@ -39,16 +40,16 @@ function App() {
         },
       }}
     >
-      {/* <DynamicWagmiConnector> */}
-      <Routes>
-        <Route path="/alert/:userId" element={<AlertBrowserSource />} />
-        <Route path="/" element={<RoutesWithChakraUi />}>
-          <Route index element={<Home />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="tiphome" element={<Tiphome />} />
-        </Route>
-      </Routes>
-      {/* </DynamicWagmiConnector> */}
+      <DynamicWagmiConnector>
+        <Routes>
+          <Route path="/alert/:userId" element={<AlertBrowserSource />} />
+          <Route path="/" element={<RoutesWithChakraUi />}>
+            <Route index element={<Home />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="tiphome" element={<Tiphome />} />
+          </Route>
+        </Routes>
+      </DynamicWagmiConnector>
     </DynamicContextProvider>
   );
 }
