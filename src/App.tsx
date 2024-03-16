@@ -25,14 +25,14 @@ function App() {
 
   return (
     <DynamicContextProvider
-      theme={"dark"}
+      // theme={"light"}
       settings={{
         environmentId: "69228cae-9b14-4a93-8567-656b7c3d7869",
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
-          onAuthSuccess: (args) => {
+          onAuthSuccess: () => {
             dispatch({ type: "setAuth" });
-            navigate("/dashboard", { state: { userInfo: args } });
+            navigate("/dashboard");
           },
           onLogout: () => {
             dispatch({ type: "setUnauth" });

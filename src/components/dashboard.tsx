@@ -12,7 +12,7 @@ import { Earnings } from "./earnings";
 import { Transactions } from "./transactions";
 
 import { http } from "viem";
-import { mainnet } from "viem/chains";
+import { mainnet, sepolia } from "viem/chains";
 import { createEnsPublicClient } from "@ensdomains/ensjs";
 import { useEffect, useState } from "react";
 import { Text } from "@chakra-ui/react";
@@ -21,7 +21,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 export const Dashboard = () => {
   // Create the client
   const client = createEnsPublicClient({
-    chain: mainnet,
+    chain: sepolia,
     transport: http(),
   });
 
@@ -48,8 +48,8 @@ export const Dashboard = () => {
   }, []);
 
   return (
-    <Box bg={"green"} width={"100vw"} height={"99vh"}>
-      <Box bg={"orange"} height={"20vh"} width={"100vw"}>
+    <Box bg={"#ffecad"} width={"100vw"} height={"99vh"}>
+      <Box bg={"#ffcf33"} height={"20vh"} width={"100vw"} borderRadius={"20px"}>
         <Box float={"right"} height={"10vh"} m={4}>
           <Center>
             <Button variant="solid">Share Link</Button>
