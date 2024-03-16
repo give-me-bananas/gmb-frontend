@@ -1,21 +1,7 @@
-@font-face {
-  font-family: "Rocher";
-  src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
-}
-
+html,
 body {
-  font-family: "Rocher";
-  text-align: center;
-  font-size: 45px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-h1 {
   margin: 0;
+  padding: 0;
 }
 
 .logo {
@@ -60,4 +46,49 @@ h1 {
 
 .yellow {
   font-palette: --Yellow;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
 }
