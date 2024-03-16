@@ -65,7 +65,7 @@ export const Dashboard = () => {
           size={"xl"}
           mt={-12}
           name="ens.eth name"
-          src="/public/img/noun.png"
+          src="/img/noun.png"
         />
       </Center>
       <Center>

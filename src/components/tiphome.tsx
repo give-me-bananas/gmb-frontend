@@ -41,7 +41,7 @@ export const Tiphome = () => {
               size={"xl"}
               mt={-12}
               name="ens.eth name"
-              src="/public/img/noun.png"
+              src="/img/noun.png"
             />
           </Center>
           <Text fontSize="2xl">Streamer name (ENS)</Text>
