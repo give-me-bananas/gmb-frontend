@@ -1,11 +1,7 @@
-import { LoaderFunction } from "react-router-dom";
 import styled from "@emotion/styled";
-// import { useState } from "react";
-
-export const loader: LoaderFunction = ({ params }) => {
-  const userId = params.userId;
-  return { userId };
-};
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { AlertData, useTipAlerts } from "../../apis/useTipAlert";
 
 const FullContainer = styled.main`
   height: 100vh;
@@ -20,12 +16,17 @@ const AlertAnimatedBox = styled.div`
   height: 600px;
   width: 1280px;
   display: flex;
+  overflow: hidden;
+  animation:
+    fadein 0.5s,
+    fadeout 0.5s 2.5s;
 `;
 
 const AlertImageBox = styled.div`
   height: 100%;
   width: 300px;
-  padding: 16px;
+  min-width: 300px;
+  max-height: 100%;
 `;
 
 const AlertImage = styled.img`
@@ -36,29 +37,75 @@ const AlertImage = styled.img`
 
 const AlertContent = styled.div`
   height: 100%;
-  padding: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-`
+`;
+
+const AlertSenderName = styled.h1`
+  font-family: "Rocher";
+  font-size: 36px;
+  margin: 16px;
+`;
+
+const AlertSenderMessage = styled.p`
+  font-family: "Inter";
+  font-size: 24px;
+  margin: 16px;
+  font-weight: bold;
+  color: #ff9900;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-height: 3.6em;
+`;
 
 export const AlertBrowserSource = () => {
-  // const { userId } = useLoaderData() as { userId: string };
-  // const [flag, setFlag] = useState<boolean>();
+  const { userId } = useParams();
+  const { hasAlerts, getNextAlert, markAlertAsRead } = useTipAlerts(
+    userId ?? "",
+  );
+  const [currentAlert, setCurrentAlert] = useState<AlertData>();
+  const [flag, setFlag] = useState<boolean>(false);
 
+  useEffect(() => {
+    const asyncFn = async () => {
+      if (hasAlerts && currentAlert === undefined) {
+        const newAlert = await getNextAlert();
+        if (newAlert) {
+          setCurrentAlert(newAlert);
+          setFlag(true);
+          markAlertAsRead(newAlert.id);
+
+          setTimeout(() => {
+            setFlag(false);
+            setCurrentAlert(undefined);
+          }, 3000);
+        }
+      }
+    };
+    asyncFn();
+  }, [hasAlerts, getNextAlert, currentAlert, markAlertAsRead]);
   return (
     <FullContainer>
-      <AlertAnimatedBox>
-        <AlertImageBox>
-          <AlertImage src="/img/good_banana.svg" />
-        </AlertImageBox>
+      {flag ? (
+        <AlertAnimatedBox>
+          <AlertImageBox>
+            <AlertImage src="/img/good_banana.svg" />
+          </AlertImageBox>
 
-        {/* <div height={"100%"} p={8} justifyItems={"center"}> */}
-        <AlertContent>
-          <h1>WK</h1>
-          <p>"Lmao that's a good banana"</p>
-        </AlertContent>
-      </AlertAnimatedBox>
+          <AlertContent>
+            <AlertSenderName>
+              {currentAlert?.senderName} gave you bananas for{" "}
+              {currentAlert?.tipAmount}
+            </AlertSenderName>
+            <AlertSenderMessage>{currentAlert?.message}</AlertSenderMessage>
+          </AlertContent>
+        </AlertAnimatedBox>
+      ) : (
+        <></>
+      )}
     </FullContainer>
   );
 };

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export type AlertData = {
   id: string;
@@ -8,17 +8,19 @@ export type AlertData = {
   tipAmount: string;
 };
 
+const BASE_URL = import.meta.env.VITE_ALERT_API_URL;
+
 export const useTipAlerts = (userId: string) => {
-  const [currentAlert, setCurrentAlert] = useState<AlertData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [alertDataArr, setAlertDataArr] = useState<AlertData[]>();
+  const [alertDataArr, setAlertDataArr] = useState<AlertData[]>([]);
 
   const fetchData = useCallback(async () => {
-    const { data, status } = await axios.get<AlertData[]>(
-      `/users/${userId}/alerts`,
-    );
+    const { data, status } = await axios.get<{
+      user: string;
+      alerts: AlertData[];
+    }>(`${BASE_URL}/users/${userId}/alerts`);
     if (status === 200) {
-      setAlertDataArr(data);
+      setAlertDataArr(data.alerts);
     } else {
       console.error(`Error ${status}: ${data}`);
     }
@@ -41,26 +43,38 @@ export const useTipAlerts = (userId: string) => {
   }, [fetchData, isLoading]);
 
   const getNextAlert = useCallback(async () => {
-    // Dequeue the next alert and remove the alert from backend
-    if (!alertDataArr || alertDataArr?.length === 0) {
-      setCurrentAlert(undefined);
+    if (alertDataArr.length === 0) {
       return;
     }
 
     const nextAlert = alertDataArr[0];
-    setIsLoading(true);
+    return nextAlert;
+  }, [alertDataArr]);
 
-    const { data, status } = await axios.delete<AlertData>(
-      `/users/${userId}/alerts/${nextAlert.id}`,
-    );
-    if (status !== 200) {
-      console.error(`Error ${status}: ${data}`);
-    }
+  const markAlertAsRead = useCallback(
+    async (alertId: string) => {
+      const nextAlert = alertDataArr[0];
+      setIsLoading(true);
 
-    // Refetch data
-    await fetchData();
-    setIsLoading(false);
-  }, [fetchData, alertDataArr, userId]);
+      const { data, status } = await axios.delete<AlertData>(
+        `${BASE_URL}/users/${userId}/alerts/${alertId}`,
+      );
+      if (status !== 204) {
+        console.error(`Error ${status}: ${data}`);
+      }
 
-  return { currentAlert, getNextAlert };
+      // Refetch data
+      await fetchData();
+      setIsLoading(false);
+      return nextAlert;
+    },
+    [fetchData, alertDataArr, userId],
+  );
+
+  const hasAlerts = useMemo(
+    () => !isLoading && alertDataArr.length > 0,
+    [isLoading, alertDataArr],
+  );
+
+  return { hasAlerts, getNextAlert, markAlertAsRead };
 };

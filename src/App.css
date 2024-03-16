@@ -1,94 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap");
+
+@font-face {
+  font-family: "Rocher";
+  src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
 }
 
-.logo {
-  height: 20vh;
-  margin-top: -40px;
-  margin-bottom: -40px;
-  color: #000;
-  font-family: Arial, sans-serif;
-}
-
-@font-palette-values --Grays {
-  font-family: Rocher;
-  base-palette: 9;
-}
-
-@font-palette-values --Purples {
-  font-family: Rocher;
-  base-palette: 6;
-}
-
-@font-palette-values --Mint {
-  font-family: Rocher;
-  base-palette: 7;
-}
-
-@font-palette-values --Yellow {
-  font-family: Rocher;
-  base-palette: 5;
-}
-
-.grays {
-  font-palette: --Grays;
-}
-
-.purples {
-  font-palette: --Purples;
-}
-
-.mint {
-  font-palette: --Mint;
-}
-
-.yellow {
-  font-palette: --Yellow;
-}
-
 /* Animations to fade the snackbar in and out */
 @-webkit-keyframes fadein {
   from {
-    bottom: 0;
+    height: 0;
     opacity: 0;
   }
   to {
-    bottom: 30px;
+    height: 600px;
     opacity: 1;
   }
 }
 
 @keyframes fadein {
   from {
-    bottom: 0;
+    height: 0;
     opacity: 0;
   }
   to {
-    bottom: 30px;
+    height: 600px;
     opacity: 1;
   }
 }
 
 @-webkit-keyframes fadeout {
   from {
-    bottom: 30px;
+    height: 600px;
     opacity: 1;
   }
   to {
-    bottom: 0;
+    height: 0;
     opacity: 0;
   }
 }
 
 @keyframes fadeout {
   from {
-    bottom: 30px;
+    height: 600px;
     opacity: 1;
   }
   to {
-    bottom: 0;
+    height: 0;
     opacity: 0;
   }
 }

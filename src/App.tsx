@@ -1,20 +1,11 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { Home } from "./components/home";
 import "./App.css";
-import {
-  BrowserRouter,
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { useGlobalState } from "./reducer";
-import {
-  AlertBrowserSource,
-  loader as alertBrowserSourceLoader,
-} from "./pages/alert/AlertBrowserSource";
+import { AlertBrowserSource } from "./pages/alert/AlertBrowserSource";
 import { Dashboard } from "./components/dashboard";
 import { Tiphome } from "./components/tiphome";
 import theme from "./theme";
@@ -50,11 +41,7 @@ function App() {
     >
       {/* <DynamicWagmiConnector> */}
       <Routes>
-        <Route
-          path="/alert/:userId"
-          element={<AlertBrowserSource />}
-          loader={alertBrowserSourceLoader}
-        />
+        <Route path="/alert/:userId" element={<AlertBrowserSource />} />
         <Route path="/" element={<RoutesWithChakraUi />}>
           <Route index element={<Home />} />
           <Route path="dashboard" element={<Dashboard />} />
