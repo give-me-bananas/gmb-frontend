@@ -10,16 +10,7 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import {
-  Card,
-  CardHeader,
-  Heading,
-  CardBody,
-  CardFooter,
-  Stack,
-  StackDivider,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardHeader, Heading, CardBody } from "@chakra-ui/react";
 
 export const Transactions = () => {
   return (

@@ -1,6 +1,5 @@
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
-import { Center, Container, Flex } from "@chakra-ui/react";
-import { VStack } from "@chakra-ui/react";
+import { Container, Flex } from "@chakra-ui/react";
 import logo from "/img/logo.svg";
 import title from "/img/title.png";
 

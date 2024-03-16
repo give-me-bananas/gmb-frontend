@@ -10,8 +10,6 @@ import {
   Box,
   Stack,
   Badge,
-  Image,
-  CardHeader,
 } from "@chakra-ui/react";
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import title from "/img/title.png";
