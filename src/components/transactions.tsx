@@ -23,7 +23,7 @@ import {
 
 export const Transactions = () => {
   return (
-    <Box m={4} p={0} w="60%" bg="green.400">
+    <Box m={4} p={0} w="60%">
       <Card>
         <CardBody>
           <TableContainer>

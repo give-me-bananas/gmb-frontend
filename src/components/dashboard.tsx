@@ -13,16 +13,26 @@ import {
 import { Earnings } from "./earnings";
 import { Transactions } from "./transactions";
 
+import { http } from "viem";
+import { mainnet } from "viem/chains";
+import { createEnsPublicClient } from "@ensdomains/ensjs";
+
+// Create the client
+const client = createEnsPublicClient({
+  chain: mainnet,
+  transport: http(),
+});
+
 export const Dashboard = () => {
   return (
-    <Container bg={"orange"} width={"100vw"} p={0}>
-      <Container bg={"yellow"} height={"20vh"} width={"100vw"} p={0}>
-        <Box bg={"tomato"} float={"right"} height={"10vh"} p={4}>
+    <Container width={"100vw"} p={0}>
+      <Container bg={"orange"} height={"20vh"} width={"100vw"} p={0}>
+        <Box float={"right"} height={"10vh"} p={4}>
           <Center>
             <Button variant="solid">Share Link</Button>
           </Center>
         </Box>
-        <Box bg={"orange"} float={"right"} p={4} height={"10vh"}>
+        <Box float={"right"} p={4} pr={-4} height={"10vh"}>
           <DynamicWidget />
         </Box>
       </Container>
