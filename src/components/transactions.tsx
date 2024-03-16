@@ -23,8 +23,11 @@ import {
 
 export const Transactions = () => {
   return (
-    <Box m={4} p={0} w="60%">
-      <Card>
+    <Box m={4} w="60%">
+      <Card size={"md"}>
+        <CardHeader>
+          <Heading size="md">Transaction History</Heading>
+        </CardHeader>
         <CardBody>
           <TableContainer>
             <Table size="sm">

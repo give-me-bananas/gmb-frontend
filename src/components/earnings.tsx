@@ -12,8 +12,8 @@ import { NumberInput, NumberInputField } from "@chakra-ui/react";
 
 export const Earnings = () => {
   return (
-    <Box m={4} mr={0} p={0} w="40%">
-      <Card>
+    <Box m={4} mr={0} w="40%" maxH={"20vh"}>
+      <Card size={"md"}>
         <CardHeader>
           <Heading size="md">Earnings Report</Heading>
         </CardHeader>
