@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { ENTRYPOINT_ADDRESS_V06_TYPE } from "permissionless/types";
 import { useNetwork } from "wagmi";
+import config from "../../config";
 
 const PIMLICO_API_KEY = import.meta.env.VITE_PIMLICO_API_KEY;
 
@@ -29,10 +30,15 @@ export const useSmartAccountClient = () => {
 
   useEffect(() => {
     if (smartAccount && chain) {
+      const canonicalName =
+        config.chainCannonicalName[
+          chain.id as keyof typeof config.chainCannonicalName
+        ];
+
       const pimlicoPaymasterClient = createPimlicoPaymasterClient({
         chain,
         transport: http(
-          `https://api.pimlicoio/v2/${chain?.name}/rpc?apikey=${PIMLICO_API_KEY}`,
+          `https://api.pimlicoio/v2/${canonicalName}/rpc?apikey=${PIMLICO_API_KEY}`,
         ),
         entryPoint: ENTRYPOINT_ADDRESS_V06,
       });
@@ -41,7 +47,7 @@ export const useSmartAccountClient = () => {
         account: smartAccount,
         chain,
         bundlerTransport: http(
-          `https://api.pimlicoio/v2/${chain?.name}/rpc?apikey=${PIMLICO_API_KEY}`,
+          `https://api.pimlicoio/v2/${canonicalName}/rpc?apikey=${PIMLICO_API_KEY}`,
         ),
         entryPoint: ENTRYPOINT_ADDRESS_V06,
         middleware: {

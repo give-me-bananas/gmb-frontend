@@ -8,22 +8,18 @@ import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
-  const { state } = useGlobalState();
+  const { state, dispatch } = useGlobalState();
   const navigate = useNavigate();
   const { isConnected } = useAccount();
   const { handleLogOut } = useDynamicContext();
   useEffect(() => {
-    if (state.isAuth) {
-      if (!isConnected) {
-        handleLogOut();
-      }
-      navigate("/dashboard", { replace: true });
-    } else {
-      if (!state.isAuth && !isConnected) {
-        handleLogOut();
-      }
+    if (state.isAuth && !isConnected) {
+      dispatch({ type: "setUnauth" });
     }
-  }, [state, isConnected, navigate, handleLogOut]);
+    if ((state.isAuth && !isConnected) || (!state.isAuth && !isConnected)) {
+      handleLogOut();
+    }
+  }, [state, isConnected, navigate, dispatch]);
 
   return (
     <Box bg={"#ffecad"}>

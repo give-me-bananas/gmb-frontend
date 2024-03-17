@@ -45,7 +45,7 @@ export const Dashboard = () => {
       }
     };
     asyncFn();
-  }, [address, user, isBoundOnChain, registerAccount]);
+  }, [address, user, isBoundOnChain]);
 
   return (
     <Box bg={"#ffecad"} width={"100vw"} height={"99vh"}>

@@ -1,4 +1,10 @@
 const config = {
+  chainCannonicalName: {
+    // Arbitrum sepolia
+    421614: "arbitrum-sepolia",
+    // Base sepolia
+    84532: "base-sepolia",
+  },
   bananaControllerAddress: {
     // Arbitrum sepolia
     421614: "0x0e1E9dEcd77F96Ed2d6d61c36aC658404c5a3423",
