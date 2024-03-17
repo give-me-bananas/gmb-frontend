@@ -16,6 +16,7 @@ import title from "/img/title.png";
 import welcome from "/img/welcome.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "/img/logo.svg";
 
 export const InputStreamer = () => {
   const [ensName, setEnsName] = useState<string>(""); // Update the type of ensName to string
@@ -41,10 +42,10 @@ export const InputStreamer = () => {
     >
       <VStack>
         <img
-          src={title}
+          src={logo}
           className="title"
           alt="title"
-          style={{ width: "50%", marginTop: "-20" }}
+          style={{ width: "30%", marginTop: "-40" }}
         />
         <Card maxW="md">
           <CardHeader>
