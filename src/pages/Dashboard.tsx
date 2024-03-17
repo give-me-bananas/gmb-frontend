@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalState } from "../reducer";
 
 export const Dashboard = () => {
-  const { user } = useDynamicContext();
   const { state } = useGlobalState();
   const { address, isConnected } = useAccount();
   const navigate = useNavigate();
@@ -29,23 +28,23 @@ export const Dashboard = () => {
     useState<boolean>(false);
 
   useEffect(() => {
-    console.log(state);
-    console.log(isConnected);
     if (!state.isAuth && !isConnected) {
       navigate("/", { replace: true });
     }
   }, [isConnected, navigate, state]);
 
   useEffect(() => {
+    console.log("render");
+    console.log(address, isBoundOnChain, registerAccount);
     const asyncFn = async () => {
-      if (address && ((user?.newUser && !isBoundOnChain) || !isBoundOnChain)) {
+      if (address && !isBoundOnChain) {
         setShowFirstTimeDialog(true);
         await registerAccount();
         setShowFirstTimeDialog(false);
       }
     };
     asyncFn();
-  }, [address, user, isBoundOnChain]);
+  }, [address, isBoundOnChain, registerAccount]);
 
   return (
     <Box bg={"#ffecad"} width={"100vw"} height={"99vh"}>
