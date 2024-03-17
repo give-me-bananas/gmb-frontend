@@ -1,5 +1,6 @@
 import { encodeFunctionData } from "viem";
 import * as BananaController from "./abis/BananaController.abi.json";
+import * as IERC20 from "./abis/IERC20.json";
 
 export function encodeDonateFunction(
   recipient: string,
@@ -17,4 +18,12 @@ export function encodeDonateFunction(
   return data;
 }
 
-export function encodeApproveFunction() {}
+export function encodeApproveFunction(spender: string, value: bigint) {
+  const data = encodeFunctionData({
+    abi: IERC20.abi,
+    args: [spender, BigInt(value)],
+    functionName: "approve",
+  });
+
+  return data;
+}
