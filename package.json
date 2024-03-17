@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.11.0",
     "@ensdomains/ensjs": "^3.4.4",
     "axios": "^1.6.8",
+
     "framer-motion": "^11.0.14",
     "permissionless": "^0.1.10",
     "react": "^18.2.0",

@@ -1,59 +1,40 @@
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
-import {
-  Avatar,
-  Box,
-  Stack,
-  Badge,
-  Center,
-  Flex,
-  Button,
-} from "@chakra-ui/react";
+import { Avatar, Box, Stack, Badge, Center, Flex } from "@chakra-ui/react";
 import { Earnings } from "./earnings";
 import { Transactions } from "./transactions";
-
-import { http } from "viem";
-import { mainnet } from "viem/chains";
-import { createEnsPublicClient } from "@ensdomains/ensjs";
 import { useEffect, useState } from "react";
 import { Text } from "@chakra-ui/react";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useGetEnsDetailsByAddress } from "../hooks/useGetEnsDetails";
+import streamerBG from "/img/streamerBG.jpeg";
 
 export const Dashboard = () => {
-  // Create the client
-  const client = createEnsPublicClient({
-    chain: mainnet,
-    transport: http(),
-  });
-
   const [ethAddress, setEthAddress] = useState<string>("");
-  const [ensName, setEnsName] = useState<string>("");
   const { user } = useDynamicContext();
+
+  const { name: ensName, records: ensDetails } =
+    useGetEnsDetailsByAddress(ethAddress);
 
   useEffect(() => {
     if (user?.verifiedCredentials[0]?.address) {
-      const add = user?.verifiedCredentials[0]?.address.slice(2);
+      const add = user?.verifiedCredentials[0]?.address;
       setEthAddress(add);
       console.log(ethAddress);
     }
   }, [user]);
 
-  useEffect(() => {
-    const getName = async () => {
-      const address = await client.getName({
-        address: `0x${ethAddress}`,
-      });
-      setEnsName(address?.name.toString() || ""); // Convert address name to string and provide a default value when address is null
-    };
-    getName();
-  }, []);
-
   return (
-    <Box bg={"green"} width={"100vw"} height={"99vh"}>
-      <Box bg={"orange"} height={"20vh"} width={"100vw"}>
+    <Box bg={"#ffecad"} width={"100vw"} height={"99vh"}>
+      <Box
+        bgImg={streamerBG}
+        height={"20vh"}
+        width={"100vw"}
+        borderRadius={"20px"}
+      >
         <Box float={"right"} height={"10vh"} m={4}>
-          <Center>
+          {/* <Center>
             <Button variant="solid">Share Link</Button>
-          </Center>
+          </Center> */}
         </Box>
         <Box float={"right"} m={4} mr={-2} pr={-4} height={"10vh"}>
           <DynamicWidget />
@@ -64,8 +45,8 @@ export const Dashboard = () => {
           bg={"green"}
           size={"xl"}
           mt={-12}
-          name="ens.eth name"
-          src="/img/noun.png"
+          name={ensName ? ensName : "GMB"}
+          src={ensDetails?.ensAvatar}
         />
       </Center>
       <Center>
@@ -73,10 +54,10 @@ export const Dashboard = () => {
       </Center>
       <Center p={2}>
         <Stack direction="row">
-          <Badge>Default</Badge>
-          <Badge colorScheme="green">Success</Badge>
-          <Badge colorScheme="red">Removed</Badge>
-          <Badge colorScheme="purple">New</Badge>
+          <Badge colorScheme="green">{ensDetails?.ensDescription}</Badge>
+          <Badge colorScheme="red">Github: {ensDetails?.ensGithub}</Badge>
+          <Badge colorScheme="purple">Twitch: {ensDetails?.ensTwitch}</Badge>
+          <Badge>Discord: {ensDetails?.ensDiscord}</Badge>
         </Stack>
       </Center>
       <Flex>
