@@ -34,7 +34,7 @@ function App() {
   return (
     <DynamicContextProvider
       settings={{
-        environmentId: "69228cae-9b14-4a93-8567-656b7c3d7869",
+        environmentId: "5ccea484-ee0c-4f68-88f8-4d0eaf6a6b87",
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
           onAuthSuccess: () => {
