@@ -10,19 +10,28 @@ import {
   Box,
   Stack,
   Badge,
-  Image,
+  Flex,
   CardHeader,
 } from "@chakra-ui/react";
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import title from "/img/title.png";
+import { useParams } from "react-router-dom";
+import streamerBG from "/img/streamerBG.jpeg";
+import { useGetEnsDetailsByName } from "../hooks/useGetEnsDetails";
 
-export const Tiphome = () => {
+export const GmbStreamer = () => {
+  const { ensname } = useParams();
+  const { address: ensAddress, records: ensDetails } = useGetEnsDetailsByName(
+    ensname ?? "",
+  );
+
   return (
     <Center
       bg={"#ffecad"}
       height={"100vh"}
       justifyContent={"center"}
       alignItems={"center"}
+      // bgImg={streamerBG}
     >
       <VStack>
         <img
@@ -32,8 +41,8 @@ export const Tiphome = () => {
           style={{ width: "50%", marginTop: "-10" }}
         />
         <Card maxW="md">
-          <Container bg={"#ffcf33"} height={"20vh"} width="md" p={0}>
-            <Box bg={"orange"} float={"right"} p={2} height={"10vh"}>
+          <Container bgImg={streamerBG} height={"20vh"} width="md" p={0}>
+            <Box float={"right"} p={2} height={"10vh"}>
               <DynamicWidget />
             </Box>
           </Container>
@@ -42,19 +51,23 @@ export const Tiphome = () => {
               bg={"green"}
               size={"xl"}
               mt={-12}
-              name="ens.eth name"
-              src="/img/noun.png"
+              name={ensname}
+              src={ensDetails?.ensAvatar}
             />
           </Center>
-          <Text fontSize="2xl">Streamer name (ENS)</Text>
-          <Center p={2}>
-            <Stack direction="row">
-              <Badge>Default</Badge>
-              <Badge colorScheme="green">Success</Badge>
-              <Badge colorScheme="red">Removed</Badge>
-              <Badge colorScheme="purple">New</Badge>
-            </Stack>
+          <Center>
+            <Text fontSize="2xl">{ensname}</Text>
           </Center>
+          <Flex maxW="md" p={2}>
+            <Stack direction="row">
+              <Badge colorScheme="green">{ensDetails?.ensDescription}</Badge>
+              <Badge colorScheme="red">Github: {ensDetails?.ensGithub}</Badge>
+              <Badge colorScheme="purple">
+                Twitch: {ensDetails?.ensTwitch}
+              </Badge>
+              <Badge>Discord: {ensDetails?.ensDiscord}</Badge>
+            </Stack>
+          </Flex>
 
           <CardBody>
             <VStack>

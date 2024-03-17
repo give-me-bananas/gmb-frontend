@@ -5,15 +5,15 @@ import { Transactions } from "./transactions";
 import { useEffect, useState } from "react";
 import { Text } from "@chakra-ui/react";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { useGetEnsDetails } from "../hooks/useGetEnsDetails";
+import { useGetEnsDetailsByAddress } from "../hooks/useGetEnsDetails";
 import streamerBG from "/img/streamerBG.jpeg";
-// import bg2 from "/img/bg2.jpeg";
 
 export const Dashboard = () => {
   const [ethAddress, setEthAddress] = useState<string>("");
   const { user } = useDynamicContext();
 
-  const { name: ensName, records: ensDetails } = useGetEnsDetails(ethAddress);
+  const { name: ensName, records: ensDetails } =
+    useGetEnsDetailsByAddress(ethAddress);
 
   useEffect(() => {
     if (user?.verifiedCredentials[0]?.address) {

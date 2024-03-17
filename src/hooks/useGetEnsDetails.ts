@@ -12,7 +12,89 @@ type EnsDetails = {
   ensDiscord: string;
 };
 
-export const useGetEnsDetails = (address: string) => {
+export const useGetEnsDetailsByName = (name: string) => {
+  const [ensAddress, setEnsAddress] = useState<string>();
+  const [ensDetails, setEnsDetails] = useState<EnsDetails>();
+  const [setPubClient] = useState<EnsPublicClient>();
+  const [viemClient, setViemClient] = useState<PublicClient>();
+
+  useEffect(() => {
+    // Viem client
+    const vClient = createPublicClient({
+      chain: sepolia,
+      transport: http(),
+    });
+
+    setViemClient(vClient);
+  }, []);
+
+  useEffect(() => {
+    const getDetails = async () => {
+      if (viemClient) {
+        const normalizedEnsName = normalize(name ?? "");
+        const myGithubPromise = viemClient.getEnsText({
+          name: normalizedEnsName,
+          key: "com.github",
+        });
+
+        const myDescriptionPromise = viemClient.getEnsText({
+          name: normalizedEnsName,
+          key: "gmb.description",
+        });
+
+        const myAvatarPromise = viemClient.getEnsText({
+          name: normalizedEnsName,
+          key: "avatar",
+        });
+
+        const myTwitchPromise = viemClient.getEnsText({
+          name: normalizedEnsName,
+          key: "com.twitch",
+        });
+
+        const myDiscordPromise = viemClient.getEnsText({
+          name: normalizedEnsName,
+          key: "com.discord",
+        });
+
+        const myAddressPromise = viemClient.getEnsAddress({
+          name: normalizedEnsName,
+        });
+
+        const [
+          myGithub,
+          myDescription,
+          myAvatar,
+          myTwitch,
+          myDiscord,
+          myAddress,
+        ] = await Promise.all([
+          myGithubPromise,
+          myDescriptionPromise,
+          myAvatarPromise,
+          myTwitchPromise,
+          myDiscordPromise,
+          myAddressPromise,
+        ]);
+
+        setEnsAddress(myAddress?.toString() ?? "");
+
+        setEnsDetails({
+          ensAvatar: myAvatar?.toString() ?? "",
+          ensDescription: myDescription?.toString() ?? "",
+          ensGithub: myGithub?.toString() ?? "",
+          ensTwitch: myTwitch?.toString() ?? "",
+          ensDiscord: myDiscord?.toString() ?? "",
+        });
+      }
+    };
+    getDetails();
+  }, [viemClient]);
+
+  return { address: ensAddress, records: ensDetails };
+};
+
+export const useGetEnsDetailsByAddress = (address: string) => {
   const [ensName, setEnsName] = useState<string>();
   const [ensDetails, setEnsDetails] = useState<EnsDetails>();
   const [pubClient, setPubClient] = useState<EnsPublicClient>();

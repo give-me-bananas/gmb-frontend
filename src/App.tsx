@@ -7,7 +7,7 @@ import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { useGlobalState } from "./reducer";
 import { AlertBrowserSource } from "./pages/alert/AlertBrowserSource";
 import { Dashboard } from "./components/dashboard";
-import { Tiphome } from "./components/tiphome";
+import { GmbStreamer } from "./components/gmbStreamer";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import theme from "./theme";
 import { InputStreamer } from "./components/inputStreamer";
@@ -33,11 +33,11 @@ function App() {
         eventsCallbacks: {
           onAuthSuccess: () => {
             dispatch({ type: "setAuth" });
-            navigate("/dashboard");
+            // navigate("/dashboard");
           },
           onLogout: () => {
             dispatch({ type: "setUnauth" });
-            navigate("/");
+            // navigate("/");
           },
         },
       }}
@@ -48,7 +48,7 @@ function App() {
           <Route path="/" element={<RoutesWithChakraUi />}>
             <Route index element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="tiphome" element={<Tiphome />} />
+            <Route path="gmb/:ensname" element={<GmbStreamer />} />
             <Route path="gmb" element={<InputStreamer />} />
           </Route>
         </Routes>
