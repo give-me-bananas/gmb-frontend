@@ -1,30 +1,55 @@
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { Avatar, Box, Stack, Badge, Center, Flex } from "@chakra-ui/react";
-import { Earnings } from "./earnings";
-import { Transactions } from "./transactions";
+import { Earnings } from "../components/earnings";
+import { Transactions } from "../components/transactions";
 import { useEffect, useState } from "react";
 import { Text } from "@chakra-ui/react";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useGetEnsDetailsByAddress } from "../hooks/useGetEnsDetails";
 import streamerBG from "/img/streamerBG.jpeg";
+import { useAccount } from "wagmi";
+import { FirstTimeDialog } from "../components/FirstTimeDialog";
+import { useGetIsStreamer } from "../hooks/streamer/useGetIsStreamer";
+import { useRegisterAccount } from "../hooks/streamer/useRegisterAccount";
+import { useNavigate } from "react-router-dom";
+import { useGlobalState } from "../reducer";
 
 export const Dashboard = () => {
-  const [ethAddress, setEthAddress] = useState<string>("");
   const { user } = useDynamicContext();
+  const { state } = useGlobalState();
+  const { address, isConnected } = useAccount();
+  const navigate = useNavigate();
+  const { data: isBoundOnChain } = useGetIsStreamer(address);
 
-  const { name: ensName, records: ensDetails } =
-    useGetEnsDetailsByAddress(ethAddress);
+  const { name: ensName, records: ensDetails } = useGetEnsDetailsByAddress(
+    address ?? "",
+  );
+  const { registerAccount } = useRegisterAccount();
+  const [showFirstTimeDialog, setShowFirstTimeDialog] =
+    useState<boolean>(false);
 
   useEffect(() => {
-    if (user?.verifiedCredentials[0]?.address) {
-      const add = user?.verifiedCredentials[0]?.address;
-      setEthAddress(add);
-      console.log(ethAddress);
+    console.log(state);
+    console.log(isConnected);
+    if (!state.isAuth && !isConnected) {
+      navigate("/", { replace: true });
     }
-  }, [user]);
+  }, [isConnected, navigate, state]);
+
+  useEffect(() => {
+    const asyncFn = async () => {
+      if (address && ((user?.newUser && !isBoundOnChain) || !isBoundOnChain)) {
+        setShowFirstTimeDialog(true);
+        await registerAccount();
+        setShowFirstTimeDialog(false);
+      }
+    };
+    asyncFn();
+  }, [address, user, isBoundOnChain, registerAccount]);
 
   return (
     <Box bg={"#ffecad"} width={"100vw"} height={"99vh"}>
+      <FirstTimeDialog onClose={() => {}} isOpen={showFirstTimeDialog} />
       <Box
         bgImg={streamerBG}
         height={"20vh"}
@@ -50,7 +75,7 @@ export const Dashboard = () => {
         />
       </Center>
       <Center>
-        <Text fontSize="2xl">{ensName ? ensName : ethAddress}</Text>
+        <Text fontSize="2xl">{ensName ? ensName : address}</Text>
       </Center>
       <Center p={2}>
         <Stack direction="row">

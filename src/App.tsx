@@ -12,7 +12,7 @@ import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { useGlobalState } from "./reducer";
 import { AlertBrowserSource } from "./pages/alert/AlertBrowserSource";
-import { Dashboard } from "./components/dashboard";
+import { Dashboard } from "./pages/Dashboard";
 import { GmbStreamer } from "./components/gmbStreamer";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import theme from "./theme";
@@ -30,11 +30,9 @@ function App() {
   const { dispatch } = useGlobalState();
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location.pathname);
 
   return (
     <DynamicContextProvider
-      // theme={"light"}
       settings={{
         environmentId: "69228cae-9b14-4a93-8567-656b7c3d7869",
         walletConnectors: [EthereumWalletConnectors],
@@ -44,7 +42,6 @@ function App() {
             if (location.pathname === "/") {
               navigate("/dashboard");
             }
-            // navigate("/dashboard");
           },
           onLogout: () => {
             dispatch({ type: "setUnauth" });

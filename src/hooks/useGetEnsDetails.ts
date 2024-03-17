@@ -121,7 +121,7 @@ export const useGetEnsDetailsByAddress = (address: string) => {
         const myName = await pubClient.getName({
           address: address as `0x${string}`,
         });
-        setEnsName(myName.name);
+        setEnsName(myName?.name ?? "");
       }
     };
     getName();
