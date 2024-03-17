@@ -4,7 +4,6 @@ import { Earnings } from "../components/earnings";
 import { Transactions } from "../components/transactions";
 import { useEffect, useState } from "react";
 import { Text } from "@chakra-ui/react";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useGetEnsDetailsByAddress } from "../hooks/useGetEnsDetails";
 import streamerBG from "/img/streamerBG.jpeg";
 import { useAccount } from "wagmi";
