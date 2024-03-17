@@ -1,7 +1,13 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { Home } from "./components/home";
 import "./App.css";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { useGlobalState } from "./reducer";
@@ -23,6 +29,8 @@ export const RoutesWithChakraUi = () => {
 function App() {
   const { dispatch } = useGlobalState();
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location.pathname);
 
   return (
     <DynamicContextProvider
@@ -33,11 +41,16 @@ function App() {
         eventsCallbacks: {
           onAuthSuccess: () => {
             dispatch({ type: "setAuth" });
+            if (location.pathname === "/") {
+              navigate("/dashboard");
+            }
             // navigate("/dashboard");
           },
           onLogout: () => {
             dispatch({ type: "setUnauth" });
-            // navigate("/");
+            if (location.pathname === "/dashboard") {
+              navigate("/");
+            }
           },
         },
       }}
