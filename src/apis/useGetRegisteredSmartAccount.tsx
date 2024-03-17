@@ -7,7 +7,9 @@ type RegisteredSmartAccount = {
   smartAccountAddress: string;
 };
 
-export const useGetRegisteredSmartAccount = (eoaAddress: string) => {
+export const useGetRegisteredSmartAccount = (
+  eoaAddress: string | undefined,
+) => {
   const [smartAccountAddress, setSmartAccountAddress] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -27,5 +29,5 @@ export const useGetRegisteredSmartAccount = (eoaAddress: string) => {
     asyncFn();
   }, [eoaAddress, isLoading]);
 
-  return smartAccountAddress;
+  return smartAccountAddress as `0x${string}`;
 };
