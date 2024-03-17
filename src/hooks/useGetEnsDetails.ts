@@ -15,7 +15,6 @@ type EnsDetails = {
 export const useGetEnsDetailsByName = (name: string) => {
   const [ensAddress, setEnsAddress] = useState<string>();
   const [ensDetails, setEnsDetails] = useState<EnsDetails>();
-  const [setPubClient] = useState<EnsPublicClient>();
   const [viemClient, setViemClient] = useState<PublicClient>();
 
   useEffect(() => {

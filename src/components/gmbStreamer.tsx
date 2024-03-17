@@ -8,25 +8,12 @@ import {
   Center,
   Button,
   Box,
-  Stack,
   Badge,
   Flex,
-  CardHeader,
   CardFooter,
-} from "@chakra-ui/react";
-import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
-import title from "/img/title.png";
-import { useParams } from "react-router-dom";
-import streamerBG from "/img/streamerBG.jpeg";
-import { useGetEnsDetailsByName } from "../hooks/useGetEnsDetails";
-import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
   Input,
-  FormHelperText,
-} from "@chakra-ui/react";
-import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -34,6 +21,10 @@ import {
   NumberDecrementStepper,
   Select,
 } from "@chakra-ui/react";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
+import { useParams } from "react-router-dom";
+import streamerBG from "/img/streamerBG.jpeg";
+import { useGetEnsDetailsByName } from "../hooks/useGetEnsDetails";
 
 export const GmbStreamer = () => {
   const { ensname } = useParams();
