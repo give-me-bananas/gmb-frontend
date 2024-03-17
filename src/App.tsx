@@ -58,8 +58,8 @@ function App() {
           <Route path="/" element={<RoutesWithChakraUi />}>
             <Route index element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="gmb/:ensname" element={<GmbStreamer />} />
             <Route path="gmb" element={<InputStreamer />} />
+            <Route path="gmb/:ensname" element={<GmbStreamer />} />
           </Route>
         </Routes>
       </DynamicWagmiConnector>

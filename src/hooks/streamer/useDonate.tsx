@@ -1,75 +1,59 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useChainId, useContractWrite, useWaitForTransaction } from "wagmi";
 import { Hex, parseEther } from "viem";
-import { encodeApproveFunction, encodeDonateFunction } from "../../utils";
 import config from "../../config";
 import { BananaAbi } from "../../abis/BananaController.abi";
 
 export const useDonate = () => {
   const chainId = useChainId();
-  const { data, error, isSuccess, isLoading, write } = useContractWrite({
+  const {
+    data,
+    error: callError,
+    isLoading: isCallLoading,
+    write,
+  } = useContractWrite({
     address: config.bananaControllerAddress[
       chainId as keyof (typeof config)["bananaControllerAddress"]
     ] as `0x${string}`,
     abi: BananaAbi,
-    functionName: "donate",
+    functionName: "fakeDonate",
   });
-  const [isCallLoading, setIsCallLoading] = useState<boolean>(false);
-  const [txHash, setTxHash] = useState<`0x${string}`>();
+
   const {
     isLoading: isTxLoading,
-    error,
+    error: txError,
     isSuccess,
   } = useWaitForTransaction({
-    hash: txHash,
+    hash: data?.hash,
   });
 
   const donate = useCallback(
     async (
       erc20TokenAddress: Hex,
-      bananaControllerAddress: string,
       donationAmount: bigint,
       streamerAddress: string,
       donorName: string,
       message: string,
     ) => {
-      if (saClient) {
-        setIsCallLoading(true);
-        const txHash = await saClient.sendTransactions({
-          transactions: [
-            {
-              to: erc20TokenAddress,
-              value: parseEther("0"),
-              data: encodeApproveFunction(
-                bananaControllerAddress,
-                donationAmount,
-              ),
-            },
-            {
-              to: bananaControllerAddress as `0x${string}`,
-              value: parseEther("0"),
-              data: encodeDonateFunction(
-                streamerAddress,
-                erc20TokenAddress,
-                donationAmount,
-                donorName,
-                message,
-              ),
-            },
-          ],
-          account: saClient.account!,
-        });
-        setTxHash(txHash);
-        setIsCallLoading(false);
-      }
+      write({
+        args: [
+          streamerAddress,
+          erc20TokenAddress,
+          parseEther(donationAmount.toString()),
+          donorName,
+          message,
+        ],
+      });
     },
-    [saClient],
+    [write],
   );
 
   const isLoading = useMemo(
     () => isCallLoading || isTxLoading,
     [isCallLoading, isTxLoading],
   );
+
+  const error = useMemo(() => callError || txError, [callError, txError]);
 
   return { donate, isSuccess, error, isLoading };
 };
