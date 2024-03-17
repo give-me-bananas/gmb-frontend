@@ -38,7 +38,7 @@ export const useSmartAccountClient = () => {
       const pimlicoPaymasterClient = createPimlicoPaymasterClient({
         chain,
         transport: http(
-          `https://api.pimlicoio/v2/${canonicalName}/rpc?apikey=${PIMLICO_API_KEY}`,
+          `https://api.pimlico.io/v2/${canonicalName}/rpc?apikey=${PIMLICO_API_KEY}`,
         ),
         entryPoint: ENTRYPOINT_ADDRESS_V06,
       });
@@ -47,7 +47,7 @@ export const useSmartAccountClient = () => {
         account: smartAccount,
         chain,
         bundlerTransport: http(
-          `https://api.pimlicoio/v2/${canonicalName}/rpc?apikey=${PIMLICO_API_KEY}`,
+          `https://api.pimlico.io/v2/${canonicalName}/rpc?apikey=${PIMLICO_API_KEY}`,
         ),
         entryPoint: ENTRYPOINT_ADDRESS_V06,
         middleware: {
