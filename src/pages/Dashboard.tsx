@@ -1,6 +1,5 @@
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { Avatar, Box, Stack, Badge, Center, Flex } from "@chakra-ui/react";
-import { Earnings } from "../components/earnings";
 import { Transactions } from "../components/transactions";
 import { useEffect, useState } from "react";
 import { Text } from "@chakra-ui/react";
@@ -12,6 +11,8 @@ import { useGetIsStreamer } from "../hooks/streamer/useGetIsStreamer";
 import { useRegisterAccount } from "../hooks/streamer/useRegisterAccount";
 import { useNavigate } from "react-router-dom";
 import { useGlobalState } from "../reducer";
+import { useUpdateRegisteredSmartAccount } from "../hooks/apis/useUpdateRegisteredSmartAccount";
+import { useGetRegisteredSmartAccount } from "../hooks/apis/useGetRegisteredSmartAccount";
 
 export const Dashboard = () => {
   const { state } = useGlobalState();
@@ -23,6 +24,9 @@ export const Dashboard = () => {
     address ?? "",
   );
   const { registerAccount } = useRegisterAccount();
+  const saAddress = useGetRegisteredSmartAccount(address);
+  const { updateRegisteredSmartAccount, isLoading } =
+    useUpdateRegisteredSmartAccount();
   const [showFirstTimeDialog, setShowFirstTimeDialog] =
     useState<boolean>(false);
 
@@ -33,17 +37,32 @@ export const Dashboard = () => {
   }, [isConnected, navigate, state]);
 
   useEffect(() => {
-    console.log("render");
-    console.log(address, isBoundOnChain, registerAccount);
+    const asyncFn = async () => {
+      console.log(isBoundOnChain, saAddress, address);
+      if (isBoundOnChain && !saAddress && address && !isLoading) {
+        await updateRegisteredSmartAccount(address, address);
+      }
+    };
+    asyncFn();
+  }, [
+    address,
+    saAddress,
+    isBoundOnChain,
+    updateRegisteredSmartAccount,
+    isLoading,
+  ]);
+
+  useEffect(() => {
     const asyncFn = async () => {
       if (address && !isBoundOnChain) {
         setShowFirstTimeDialog(true);
         await registerAccount();
+        await updateRegisteredSmartAccount(address, address);
         setShowFirstTimeDialog(false);
       }
     };
     asyncFn();
-  }, [address, isBoundOnChain, registerAccount]);
+  }, [address, isBoundOnChain, registerAccount, updateRegisteredSmartAccount]);
 
   return (
     <Box bg={"#ffecad"} width={"100vw"} height={"99vh"}>
@@ -84,7 +103,7 @@ export const Dashboard = () => {
         </Stack>
       </Center>
       <Flex>
-        <Earnings />
+        {/* <Earnings /> */}
         <Transactions />
       </Flex>
     </Box>

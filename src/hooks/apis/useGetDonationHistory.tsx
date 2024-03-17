@@ -20,7 +20,7 @@ export const useGetDonationHistory = (smartAccountAddress?: string) => {
 
   useEffect(() => {
     const asyncFn = async () => {
-      if (!isLoading && smartAccountAddress) {
+      if (smartAccountAddress) {
         setIsLoading(true);
         const res = await axios.get<DonationHistoryResponse[]>(
           `${BASE_URL}/donations?streamer=${smartAccountAddress}`,
@@ -40,7 +40,7 @@ export const useGetDonationHistory = (smartAccountAddress?: string) => {
     return () => {
       clearInterval(handle);
     };
-  }, [smartAccountAddress, isLoading]);
+  }, [smartAccountAddress]);
 
   return {
     data,

@@ -10,7 +10,9 @@ type RegisteredSmartAccount = {
 export const useGetRegisteredSmartAccount = (
   eoaAddress: string | undefined,
 ) => {
-  const [smartAccountAddress, setSmartAccountAddress] = useState<string>();
+  const [smartAccountAddress, setSmartAccountAddress] = useState<string | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -22,6 +24,8 @@ export const useGetRegisteredSmartAccount = (
         );
         if (res.status === 200) {
           setSmartAccountAddress(res.data.smartAccountAddress);
+        } else if (res.status === 404) {
+          setSmartAccountAddress(null);
         }
         setIsLoading(false);
       }

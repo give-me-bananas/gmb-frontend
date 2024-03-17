@@ -1,18 +1,8 @@
 export type GlobalState = {
   isAuth: boolean;
-  smartAccount: unknown;
 };
 
-export type AppAction =
-  | { type: "setAuth" }
-  | { type: "setUnauth" }
-  | {
-      type: "setSmartAccount";
-      smartAccount: unknown;
-    }
-  | {
-      type: "unsetSmartAccount";
-    };
+export type AppAction = { type: "setAuth" } | { type: "setUnauth" };
 
 export const GlobalReducer = (state: GlobalState, action: AppAction) => {
   const { type } = action;
@@ -26,16 +16,6 @@ export const GlobalReducer = (state: GlobalState, action: AppAction) => {
       return {
         ...state,
         isAuth: false,
-      };
-    case "setSmartAccount":
-      return {
-        ...state,
-        smartAccount: action.smartAccount,
-      };
-    case "unsetSmartAccount":
-      return {
-        ...state,
-        smartAccount: undefined,
       };
     default:
       return state;

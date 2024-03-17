@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useReducer } from "react";
 import { AppAction, GlobalReducer, GlobalState } from "./reducer";
 
-const initialGlobalState = { isAuth: false, smartAccount: undefined };
+const initialGlobalState = { isAuth: false };
 
 export const GlobalStateContext = createContext([
   initialGlobalState,

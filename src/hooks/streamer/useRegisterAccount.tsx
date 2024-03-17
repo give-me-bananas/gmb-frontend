@@ -1,43 +1,41 @@
-import { useCallback, useMemo, useState } from "react";
-import { useSmartAccountClient } from "../aa/useSmartAccountClient";
-import { useChainId, useWaitForTransaction } from "wagmi";
+import { useCallback, useMemo } from "react";
+import { useChainId, useContractWrite, useWaitForTransaction } from "wagmi";
 import { BananaAbi } from "../../abis/BananaController.abi";
 import config from "../../config";
 
 export const useRegisterAccount = () => {
-  const saClient = useSmartAccountClient();
   const chainId = useChainId();
-  const [isCallLoading, setIsCallLoading] = useState<boolean>(false);
-  const [txHash, setTxHash] = useState<`0x${string}`>();
+  const {
+    data,
+    error: callError,
+    isLoading: isCallLoading,
+    write,
+  } = useContractWrite({
+    address: config.bananaControllerAddress[
+      chainId as keyof (typeof config)["bananaControllerAddress"]
+    ] as `0x${string}`,
+    abi: BananaAbi,
+    functionName: "registerAsStreamer",
+  });
   const {
     isLoading: isTxLoading,
-    error,
+    error: txError,
     isSuccess,
   } = useWaitForTransaction({
-    hash: txHash,
+    hash: data?.hash,
   });
 
   const registerAccount = useCallback(async () => {
-    if (saClient) {
-      setIsCallLoading(true);
-      const txHash = await saClient.writeContract({
-        address:
-          config.bananaControllerAddress[
-            chainId as keyof (typeof config)["bananaControllerAddress"]
-          ],
-        abi: BananaAbi,
-        functionName: "registerAsStreamer",
-        args: [],
-      });
-      setTxHash(txHash);
-      setIsCallLoading(false);
+    if (!isCallLoading) {
+      write({});
     }
-  }, [saClient, chainId]);
+  }, [write, isCallLoading]);
 
   const isLoading = useMemo(
     () => isCallLoading || isTxLoading,
     [isCallLoading, isTxLoading],
   );
 
+  const error = useMemo(() => callError || txError, [callError, txError]);
   return { registerAccount, isSuccess, error, isLoading };
 };

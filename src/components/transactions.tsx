@@ -10,19 +10,17 @@ import {
 } from "@chakra-ui/react";
 import { Card, CardHeader, Heading, CardBody } from "@chakra-ui/react";
 import { useGetDonationHistory } from "../hooks/apis/useGetDonationHistory";
-import { useSmartAccountClient } from "../hooks/aa/useSmartAccountClient";
+import { useAccount } from "wagmi";
 
 export const Transactions = () => {
-  const saClient = useSmartAccountClient();
-  const { data: donationHistory } = useGetDonationHistory(
-    saClient?.account?.address,
-  );
+  const { address } = useAccount();
+  const { data: donationHistory } = useGetDonationHistory(address);
 
   return (
-    <Box m={4} w="60%" maxH={"20vh"}>
+    <Box m={4} w="100%" maxH={"20vh"}>
       <Card size={"md"}>
         <CardHeader>
-          <Heading size="md">Transaction History</Heading>
+          <Heading size="md">Incoming Bananas!</Heading>
         </CardHeader>
         <CardBody>
           <TableContainer>
