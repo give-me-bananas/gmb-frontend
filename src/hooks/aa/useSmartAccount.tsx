@@ -8,9 +8,9 @@ import { useAccount, usePublicClient } from "wagmi";
 import { useSmartAccountSigner } from "./useSmartAccountSigner";
 import { useGlobalState } from "../../reducer";
 import { useEffect } from "react";
-import { useGetRegisteredSmartAccount } from "../../apis/useGetRegisteredSmartAccount";
+import { useGetRegisteredSmartAccount } from "../apis/useGetRegisteredSmartAccount";
 import { ENTRYPOINT_ADDRESS_V06_TYPE } from "permissionless/types";
-import { useUpdateRegisteredSmartAccount } from "../../apis/useUpdateRegisteredSmartAccount";
+import { useUpdateRegisteredSmartAccount } from "../apis/useUpdateRegisteredSmartAccount";
 
 export const FACTORY_ADDRESS = "0x9406Cc6185a346906296840746125a0E44976454";
 

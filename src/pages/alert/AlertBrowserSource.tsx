@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { AlertData, useTipAlerts } from "../../apis/useTipAlert";
+import { AlertData, useTipAlerts } from "../../hooks/apis/useTipAlert";
 
 const FullContainer = styled.main`
   height: 100vh;
