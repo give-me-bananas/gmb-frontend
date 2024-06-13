@@ -1,5 +1,9 @@
 import { useCallback, useMemo } from "react";
-import { useChainId, useContractWrite, useWaitForTransaction } from "wagmi";
+import {
+  useChainId,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { BananaAbi } from "../../abis/BananaController.abi";
 import config from "../../config";
 
@@ -7,33 +11,34 @@ export const useRegisterAccount = () => {
   const chainId = useChainId();
   const {
     data,
+    isPending,
     error: callError,
-    isLoading: isCallLoading,
-    write,
-  } = useContractWrite({
-    address: config.bananaControllerAddress[
-      chainId as keyof (typeof config)["bananaControllerAddress"]
-    ] as `0x${string}`,
-    abi: BananaAbi,
-    functionName: "registerAsStreamer",
-  });
+    writeContract,
+  } = useWriteContract();
+
   const {
     isLoading: isTxLoading,
     error: txError,
     isSuccess,
-  } = useWaitForTransaction({
-    hash: data?.hash,
+  } = useWaitForTransactionReceipt({
+    hash: data,
   });
 
   const registerAccount = useCallback(async () => {
-    if (!isCallLoading) {
-      write({});
+    if (!isPending) {
+      writeContract({
+        address: config.bananaControllerAddress[
+          chainId as keyof (typeof config)["bananaControllerAddress"]
+        ] as `0x${string}`,
+        abi: BananaAbi,
+        functionName: "registerAsStreamer",
+      });
     }
-  }, [write, isCallLoading]);
+  }, [writeContract, isPending, chainId]);
 
   const isLoading = useMemo(
-    () => isCallLoading || isTxLoading,
-    [isCallLoading, isTxLoading],
+    () => isPending || isTxLoading,
+    [isPending, isTxLoading],
   );
 
   const error = useMemo(() => callError || txError, [callError, txError]);

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { normalize } from "viem/ens";
 import { http, createPublicClient, PublicClient } from "viem";
-import { sepolia } from "viem/chains";
 import { EnsPublicClient, createEnsPublicClient } from "@ensdomains/ensjs";
+import { sepolia } from "viem/chains";
 
 type EnsDetails = {
   ensDescription: string;
@@ -100,19 +100,23 @@ export const useGetEnsDetailsByAddress = (address: string) => {
   const [viemClient, setViemClient] = useState<PublicClient>();
 
   useEffect(() => {
-    // ENS client
-    const pClient = createEnsPublicClient({
-      chain: sepolia,
-      transport: http(),
-    });
-    // Viem client
-    const vClient = createPublicClient({
-      chain: sepolia,
-      transport: http(),
-    });
+    const asyncFn = async () => {
+      // ENS client
+      const pClient = await createEnsPublicClient({
+        chain: sepolia,
+        transport: http(),
+      });
+      // Viem client
+      const vClient = await createPublicClient({
+        chain: sepolia,
+        transport: http(),
+      });
 
-    setPubClient(pClient as EnsPublicClient);
-    setViemClient(vClient);
+      setPubClient(pClient as EnsPublicClient);
+      setViemClient(vClient);
+    };
+
+    asyncFn();
   }, []);
 
   useEffect(() => {

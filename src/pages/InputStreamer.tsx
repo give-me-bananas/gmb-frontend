@@ -1,8 +1,6 @@
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Center,
   Card,
@@ -12,7 +10,6 @@ import {
   Button,
   CardFooter,
 } from "@chakra-ui/react";
-import title from "/img/title.png";
 import welcome from "/img/welcome.png";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

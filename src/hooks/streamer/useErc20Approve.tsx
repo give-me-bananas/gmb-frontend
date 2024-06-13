@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
-import { erc20ABI, useContractWrite, useWaitForTransaction } from "wagmi";
+import { erc20Abi } from "viem";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 
 export const useErc20Approve = (
   tokenAddress: `0x${string}`,
@@ -8,34 +9,33 @@ export const useErc20Approve = (
   const {
     data,
     error: callError,
-    isLoading: isCallLoading,
-    write,
-  } = useContractWrite({
-    address: tokenAddress,
-    abi: erc20ABI,
-    functionName: "approve",
-  });
+    isPending,
+    writeContract,
+  } = useWriteContract();
 
   const {
     isLoading: isTxLoading,
     error: txError,
     isSuccess,
-  } = useWaitForTransaction({
-    hash: data?.hash,
+  } = useWaitForTransactionReceipt({
+    hash: data,
   });
 
   const approve = useCallback(
     async (amount: bigint) => {
-      write({
+      writeContract({
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: "approve",
         args: [spenderAddress, amount],
       });
     },
-    [write, spenderAddress],
+    [writeContract, spenderAddress],
   );
 
   const isLoading = useMemo(
-    () => isCallLoading || isTxLoading,
-    [isCallLoading, isTxLoading],
+    () => isPending || isTxLoading,
+    [isPending, isTxLoading],
   );
 
   const error = useMemo(() => callError || txError, [callError, txError]);

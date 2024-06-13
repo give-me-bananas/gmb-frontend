@@ -40,11 +40,9 @@ export const GmbStreamer = () => {
     amount?: bigint;
     tokenType?: string;
   }>();
-  // const { approve, isLoading, isApproveSuccess } = useErc20Approve();
-  // const { approve, isLoading, isSuccess } = useErc20Approve();
-  const { donate, isLoading } = useDonate();
+  const { donate, isLoading, error } = useDonate();
 
-  // console.log(formData);
+  console.log(error);
 
   const onGmbClick = async () => {
     console.log(formData);

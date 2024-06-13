@@ -1,5 +1,9 @@
 import { useCallback, useMemo } from "react";
-import { useChainId, useContractWrite, useWaitForTransaction } from "wagmi";
+import {
+  useChainId,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { Hex, parseEther } from "viem";
 import config from "../../config";
 import { BananaAbi } from "../../abis/BananaController.abi";
@@ -9,22 +13,16 @@ export const useDonate = () => {
   const {
     data,
     error: callError,
-    isLoading: isCallLoading,
-    write,
-  } = useContractWrite({
-    address: config.bananaControllerAddress[
-      chainId as keyof (typeof config)["bananaControllerAddress"]
-    ] as `0x${string}`,
-    abi: BananaAbi,
-    functionName: "fakeDonate",
-  });
+    isPending,
+    writeContract,
+  } = useWriteContract();
 
   const {
     isLoading: isTxLoading,
     error: txError,
     isSuccess,
-  } = useWaitForTransaction({
-    hash: data?.hash,
+  } = useWaitForTransactionReceipt({
+    hash: data,
   });
 
   const donate = useCallback(
@@ -35,22 +33,29 @@ export const useDonate = () => {
       donorName: string,
       message: string,
     ) => {
-      write({
-        args: [
-          streamerAddress,
-          erc20TokenAddress,
-          parseEther(donationAmount.toString()),
-          donorName,
-          message,
-        ],
-      });
+      if (!isPending) {
+        writeContract({
+          address: config.bananaControllerAddress[
+            chainId as keyof (typeof config)["bananaControllerAddress"]
+          ] as `0x${string}`,
+          abi: BananaAbi,
+          functionName: "fakeDonate",
+          args: [
+            streamerAddress,
+            erc20TokenAddress,
+            parseEther(donationAmount.toString()),
+            donorName,
+            message,
+          ],
+        });
+      }
     },
-    [write],
+    [writeContract, chainId, isPending],
   );
 
   const isLoading = useMemo(
-    () => isCallLoading || isTxLoading,
-    [isCallLoading, isTxLoading],
+    () => isPending || isTxLoading,
+    [isPending, isTxLoading],
   );
 
   const error = useMemo(() => callError || txError, [callError, txError]);
