@@ -26,7 +26,7 @@ import { useParams } from "react-router-dom";
 import streamerBG from "/img/streamerBG.jpeg";
 import { useGetEnsDetailsByName } from "../hooks/useGetEnsDetails";
 import { useDonate } from "../hooks/streamer/useDonate";
-import { useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { parseEther, parseUnits } from "viem";
 
 export const GmbStreamer = () => {
@@ -44,6 +44,28 @@ export const GmbStreamer = () => {
 
   console.log(error);
 
+  const onFormChange = useCallback(
+    (field: string) =>
+      (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        if (field === "amount") {
+          const valueString = e.target.value;
+          return setFormData((prevData) => ({
+            ...prevData,
+            amount:
+              prevData?.tokenType === "USDC"
+                ? BigInt(parseUnits(valueString, 6))
+                : BigInt(parseEther(valueString)),
+          }));
+        }
+        return setFormData((prev) => ({
+          ...prev,
+          [field]: e.target.value,
+        }));
+      },
+    [setFormData],
+  );
+
+  console.log(formData);
   const onGmbClick = async () => {
     console.log(formData);
     if (formData?.amount && formData?.name && formData?.message) {
@@ -108,24 +130,11 @@ export const GmbStreamer = () => {
           <CardBody>
             <FormControl>
               <FormLabel>Name</FormLabel>
-              <Input
-                type="string"
-                onChange={(e) =>
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    name: e.target.value,
-                  }))
-                }
-              />
+              <Input type="string" onBlur={onFormChange("name")} />
               <FormLabel>Token</FormLabel>
               <Select
                 placeholder="Select Token"
-                onChange={(event) =>
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    tokenType: event.target.value,
-                  }))
-                }
+                onBlur={onFormChange("tokenType")}
               >
                 <option value="USDC">USDC 💲</option>
                 <option value="APE">APE 🐵</option>
@@ -133,19 +142,9 @@ export const GmbStreamer = () => {
               <FormLabel>Value</FormLabel>
 
               <NumberInput
-                min={0.001}
-                max={1.0}
                 step={0.005}
                 precision={4}
-                onChange={(valueString) =>
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    amount:
-                      prevData?.tokenType === "USDC"
-                        ? BigInt(parseUnits(valueString, 6))
-                        : BigInt(parseEther(valueString)),
-                  }))
-                }
+                onBlur={onFormChange("amount")}
               >
                 <NumberInputField />
                 <NumberInputStepper>
@@ -154,15 +153,7 @@ export const GmbStreamer = () => {
                 </NumberInputStepper>
               </NumberInput>
               <FormLabel>Message</FormLabel>
-              <Input
-                type="string"
-                onChange={(e) =>
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    message: e.target.value,
-                  }))
-                }
-              />
+              <Input type="string" onBlur={onFormChange("message")} />
             </FormControl>
           </CardBody>
 
